@@ -140,25 +140,25 @@
         navigator.clipboard.readText()
         .then(text => {
           $analyzeResult = {}
-          $dataList = []
+          var dataList = []
 
           $('#clipboardContent').empty();
           
           $.each( text.split("\n"), function( i,v ){
             if( v.trim() != "" ){    
-              row = v.split("	")    
-              $dataList.append({
-                  time: row[0],
-                  price: row[1],
-                  type: row[2],
-                  code: filterList2[ row[2] ]
-              })      
+              row = v.split("	")  
+              dataList.push({
+                time: row[0],
+                price: row[1],
+                type: row[2],
+                code: filterList2[ row[2] ]
+              })
             }
           })
 
           console.log( $dataList )
           
-          const { processedData, totalBenefitPrice, winRatio } = processData( $dataList );
+          const { processedData, totalBenefitPrice, winRatio } = processData( dataList );
           createCharts(processedData);
           updateSummary(totalBenefitPrice, winRatio);
           /*
