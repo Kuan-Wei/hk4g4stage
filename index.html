@@ -1,0 +1,269 @@
+<!-- https://kuan-wei.github.io/futureStage2/ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Future Stage 2</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style type="text/css">
+        .gItemList_selected button{
+          background-color: #337ab7;
+          color: #FFF;
+        }
+        .table>tbody>tr>td{
+          vertical-align: middle !important;
+        }
+          /* Don't print link hrefs */
+          @media print {
+            a[href]:after {
+              content: none
+            }
+          }
+      </style>
+      
+      <style>
+        *{
+          font-family:"微軟正黑體";
+          font-size: 1em;
+        }
+        body{
+          background-color: #ededed;
+        }
+        textarea{
+          font-size: larger;
+          width: 95%;
+          resize : none;
+          border:1px solid #FFF;
+          background-image: url('/project/img/g_textarea.png');
+          line-height: 34px;
+          padding: 0px 10px;
+          margin-bottom: 10px;
+          outline:none;
+        }
+        /* .table > tbody > tr > th, .table > tbody > tr > td {
+          vertical-align: middle;
+        } */
+        .table > thead > tr > th {
+          /* vertical-align: middle; */
+          text-align: center;
+        }
+        .table > thead > tr > th > div > input , .table > thead > tr > th > div > select{
+          background-color: #ededed !important;
+        }
+        .table > thead > tr > th > div > input:focus {
+          outline: none !important;
+        }
+        /* .edit_content{
+
+        } */
+      </style>
+</head>
+<body>
+    
+    <div class="container-fluid  border-bottom container-head" >
+      
+        <h1 class="m-4">
+            <!-- <img class="pe-3" src='../img/CI-1.png' height="60"/> -->
+            剪貼簿內容分析<i class="bi bi-airplane"></i>
+            <button class="btn btn-primary pull-right" onclick="printClipbordContent()">貼上剪貼簿內容</button> 
+        </h1>        
+    </div>
+    <div class="container-fluid position-relative" >        
+        <div class="table-responsive m-4 rowData">          
+            <table class="table caption-top align-middle main-table table-striped" style="white-space: nowrap;">
+                <thead>
+                <tr>
+                    <th>0</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                    <th>6</th>
+                    <th>7</th>
+                    <th>8</th>
+                    <th>9</th>
+                </tr>
+                </thead>
+                <tbody id="clipboardContent" ></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="app">
+      <h1>交易分析</h1>
+      <div>
+          <canvas id="profitChart"></canvas>
+      </div>
+      <div>
+          <canvas id="winRatioChart"></canvas>
+      </div>
+      <table>
+          <tr>
+              <th>總收益</th>
+              <td>{{ totalBenefitPrice.toFixed(2) }}</td>
+          </tr>
+          <tr>
+              <th>勝率</th>
+              <td>{{ (winRatio * 100).toFixed(2) }}%</td>
+          </tr>
+      </table>
+  </div>
+  <script src="analysis.js"></script>
+    <div class="">
+        <div class="w-100 p-3 bg-secondary text-center text-white position-absolute bottom-0 container-foot">
+        Kuan-Wei © 2024
+        </div>
+    </div>
+
+    <!-- Your content goes here -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      $(function(){          //reference
+
+        window.onresize = () => { resizeWindow() };	
+              resizeWindow()
+      })
+      
+
+      function resizeWindow(){			
+        $('.rowData').css("height",( $( this ).height() - $( '.container-head' )[0].offsetHeight - $( '.container-foot' )[0].offsetHeight*2 )+"px")	
+      }
+      function printClipbordContent(){
+        result={}
+        i = 0
+        filterList = { 'A01':'新買', 'A02':'平賣', 'A03':'新賣', 'A04':'平買', 'A05':'清倉' }
+
+        navigator.clipboard.readText()
+        .then(text => {
+          $analyzeResult = {}
+          $dataList = {}
+
+          $('#clipboardContent').empty();
+          
+          $.each( text.split("\n"), function( i,v ){
+            if( v.trim() != "" && i != 0 ){
+              
+              $.each( v.split("	"), function( i2,v2 ){
+
+              })
+            }
+          })
+
+          /*
+          if( $('input[name="sortType"]:checked').val() == "user" ){
+
+            $.each( text.split("\n"), function( i,v ){
+              if( v.trim() != "" && i != 0 ){
+
+                $.each( v.split("	"), function( i2,v2 ){
+
+                  if( v2.trim() != "" ){
+                    if( i2 == 7 || i2 == 8 || i2 == 13 ){
+                      if( $dataList[ ''+v2.trim() +''] === undefined ){
+                        
+                        $dataList[ ''+v2.trim() +''] = {
+                          "first" : 0,
+                          "second" : 0,
+                          "remote" : 0,
+                          "total" : 0 
+                        }
+                      }
+                      
+                      if( i2 == 7 ){
+                        $dataList[ ''+v2.trim() +'']["first"] += 1
+                      }
+                      if( i2 == 8 ){
+                        $dataList[ ''+v2.trim() +'']["second"] += 1
+                      }
+                      if( i2 == 13 ){
+                        $dataList[ ''+v2.trim() +'']["remote"] += 1
+                      }
+                      
+                      $dataList[ ''+v2.trim() +'']["total"] += 1
+                    }
+                  }
+                  
+                } )
+                
+                
+                // $(`<td>
+                //     <div class="checkbox" style="white-space: nowrap;"><label><input type="checkbox" class="fingerprintCardCheckbox" checked> 指紋卡</label></div>
+                //     <div class="checkbox" style="white-space: nowrap;"><label><input type="checkbox" class="DNACheckbox" checked> DNA</label></div>
+                //   </td>`).appendTo( item );
+              }
+            } )
+          }else{
+            
+            $.each( text.split("\n"), function( i,v ){
+              if( v.trim() != "" && i != 0 ){
+
+                $.each( v.split("	"), function( i2,v2 ){
+
+                  if( v2.trim() != "" ){
+                    if( i2 == 4 ){
+                      if( $dataList[ ''+v2.trim() +''] === undefined ){
+                        
+                        $dataList[ ''+v2.trim() +''] = {
+                          "first" : '',
+                          "second" : '',
+                          "remote" : '',
+                          "total" : 0 
+                        }
+                      }                        
+                      
+                      $dataList[ ''+v2.trim() +'']["total"] += 1
+                    }
+                  }
+                  
+                } )
+                
+              }
+            } )
+          }
+          */
+          
+          console.log( $dataList )
+
+          // $.each( $dataList, function(i,v){
+          //     var item = $('<tr></tr>');
+          //     $(`<td class="text-center">${i}</td>`).appendTo( item );
+          //     $(`<td class="text-center">${v["first"]}</td>`).appendTo( item );
+          //     $(`<td class="text-center">${v["second"]}</td>`).appendTo( item );
+          //     $(`<td class="text-center">${v["remote"]}</td>`).appendTo( item );
+          //     $(`<td class="text-center">${v["total"]}</td>`).appendTo( item );
+          //     item.appendTo( $('#clipboardContent') );
+
+          // })
+          
+          /*
+          const _sortable = Object.fromEntries(
+              Object.entries( $dataList ).sort(([,a],[,b]) => b["total"]-a["total"])
+          );
+
+          $.each( _sortable, function(i,v){
+              var item = $('<tr></tr>');
+              $(`<td class="text-center">${i}</td>`).appendTo( item );
+              $(`<td class="text-center">${v["first"]}</td>`).appendTo( item );
+              $(`<td class="text-center">${v["second"]}</td>`).appendTo( item );
+              $(`<td class="text-center">${v["remote"]}</td>`).appendTo( item );
+              $(`<td class="text-center">${v["total"]}</td>`).appendTo( item );
+              item.appendTo( $('#clipboardContent') );
+
+          })
+          console.log(_sortable);
+          */
+        } )
+        .catch(err => {
+          console.error('Failed to read clipboard contents: ', err);
+        });
+      }
+    </script>
+</body>
+</html>
