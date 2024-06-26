@@ -81,13 +81,15 @@ $(document).ready(function() {
             },
             options: {
                 responsive: true,
-                title: {
-                    display: true,
-                    text: '累計收益趨勢'
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '累計收益趨勢'
+                    }
                 }
             }
         });
-
+        
         // 創建勝率圖表
         new Chart($("#winRatioChart"), {
             type: 'line',
@@ -106,17 +108,17 @@ $(document).ready(function() {
             },
             options: {
                 responsive: true,
-                title: {
-                    display: true,
-                    text: '勝率變化'
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '勝率變化'
+                    }
                 },
                 scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            max: 1
-                        }
-                    }]
+                    y: {
+                        beginAtZero: true,
+                        max: 1
+                    }
                 }
             }
         });
