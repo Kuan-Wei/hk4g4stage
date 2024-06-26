@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>Future Stage 2</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style type="text/css">
         .gItemList_selected button{
@@ -73,20 +72,123 @@
         </h1>        
     </div>
     <div class="container-fluid position-relative" >        
+        <table class="table table-striped">
+              <tr>
+                <th>正點數</th>
+                <th>負點數</th>
+                <th>總點數</th>
+                <th>總次數</th>
+              </tr>
+              <tr>
+                <td id="winPrice"></td>
+                <td id="losePrice"></td>
+                <td id="totalPrice"></td>
+                <td id="totalTimes"></td>
+              </tr>
+              <tr>
+                <th>滑價0點累計獲利</th>
+                <th>賺次數</th>
+                <th>賠次數</th>
+                <th>勝率</th>
+                <th>敗率</th>
+                <th>期望值</th>
+                <th>最大回撤金額</th>
+                <th>年化報酬率</th>
+              </tr>
+              <tr>
+                <td id="totalBenefitPrice_0"></td>
+                <td id="winTimes_0"></td>
+                <td id="loseTimes_0"></td>
+                <td id="winRatio_0"></td>
+                <td id="loseRatio_0"></td>
+                <td id="expectedValue_0"></td>
+                <td id="maxBackValue_0"></td>
+                <td id="roi_0"></td>
+              </tr>
+              <tr>
+                <th>滑價1點累計獲利</th>
+                <th>賺次數</th>
+                <th>賠次數</th>
+                <th>勝率</th>
+                <th>敗率</th>
+                <th>期望值</th>
+                <th>最大回撤金額</th>
+                <th>年化報酬率</th>
+              </tr>
+              <tr>
+                <td id="totalBenefitPrice_1"></td>
+                <td id="winTimes_1"></td>
+                <td id="loseTimes_1"></td>
+                <td id="winRatio_1"></td>
+                <td id="loseRatio_1"></td>
+                <td id="expectedValue_1"></td>
+                <td id="maxBackValue_1"></td>
+                <td id="roi_1"></td>
+              </tr>
+              <tr>
+                <th>滑價1.5點累計獲利</th>
+                <th>賺次數</th>
+                <th>賠次數</th>
+                <th>勝率</th>
+                <th>敗率</th>
+                <th>期望值</th>
+                <th>最大回撤金額</th>
+                <th>年化報酬率</th>
+              </tr>
+              <tr>
+                <td id="totalBenefitPrice_average"></td>
+                <td id="winTimes_average"></td>
+                <td id="loseTimes_average"></td>
+                <td id="winRatio_average"></td>
+                <td id="loseRatio_average"></td>
+                <td id="expectedValue_average"></td>
+                <td id="maxBackValue_average"></td>
+                <td id="roi_average"></td>
+              </tr>
+              <tr>
+                <th>滑價2點累計獲利</th>
+                <th>賺次數</th>
+                <th>賠次數</th>
+                <th>勝率</th>
+                <th>敗率</th>
+                <th>期望值</th>
+                <th>最大回撤金額</th>
+                <th>年化報酬率</th>
+              </tr>
+              <tr>
+                <td id="totalBenefitPrice_2"></td>
+                <td id="winTimes_2"></td>
+                <td id="loseTimes_2"></td>
+                <td id="winRatio_2"></td>
+                <td id="loseRatio_2"></td>
+                <td id="expectedValue_2"></td>
+                <td id="maxBackValue_2"></td>
+                <td id="roi_2"></td>
+              </tr>
+        </table>
+        <div>
+            <canvas id="profitChart"></canvas>
+        </div>
+        <div>
+            <canvas id="winRatioChart"></canvas>
+        </div>      
         <div class="table-responsive m-4 rowData">          
             <table class="table caption-top align-middle main-table table-striped" style="white-space: nowrap;">
                 <thead>
                 <tr>
-                    <th>0</th>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                    <th>5</th>
-                    <th>6</th>
-                    <th>7</th>
-                    <th>8</th>
-                    <th>9</th>
+                    <th>時間</th>
+                    <th>價格</th>
+                    <th>類型</th>
+                    <th>代碼</th>
+                    <th>收益</th>
+                    <th>收益價格</th>
+                    <th>收益價格_1</th>
+                    <th>收益價格_1.5</th>
+                    <th>收益價格_2</th>
+                    <th>總收益</th>
+                    <th>總收益_1</th>
+                    <th>總收益_1.5</th>
+                    <th>總收益_2</th>
                 </tr>
                 </thead>
                 <tbody id="clipboardContent" ></tbody>
@@ -94,36 +196,17 @@
         </div>
     </div>
 
-    <div id="app">
-      <h1>交易分析</h1>
-      <div>
-          <canvas id="profitChart"></canvas>
-      </div>
-      <div>
-          <canvas id="winRatioChart"></canvas>
-      </div>
-      <table>
-          <tr>
-              <th>總收益</th>
-              <td>{{ totalBenefitPrice.toFixed(2) }}</td>
-          </tr>
-          <tr>
-              <th>勝率</th>
-              <td>{{ (winRatio * 100).toFixed(2) }}%</td>
-          </tr>
-      </table>
-  </div>
-  <script src="analysis.js"></script>
     <div class="">
-        <div class="w-100 p-3 bg-secondary text-center text-white position-absolute bottom-0 container-foot">
-        Kuan-Wei © 2024
+        <div class="w-100 p-3 bg-secondary text-center text-white  bottom-0 container-foot">
+        三劍客 © 2024
         </div>
     </div>
 
     <!-- Your content goes here -->
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="analysis.js"></script>
     <script type="text/javascript">
       $(function(){          //reference
 
@@ -138,127 +221,48 @@
       function printClipbordContent(){
         result={}
         i = 0
-        filterList = { 'A01':'新買', 'A02':'平賣', 'A03':'新賣', 'A04':'平買', 'A05':'清倉' }
+        filterList2 = { '新買':'A01', '平賣':'A02', '新賣':'A03', '平買':'A04', '強制平倉':'A05' }
 
         navigator.clipboard.readText()
         .then(text => {
           $analyzeResult = {}
-          $dataList = {}
+          var dataList = []
 
           $('#clipboardContent').empty();
           
           $.each( text.split("\n"), function( i,v ){
-            if( v.trim() != "" && i != 0 ){
-              
-              $.each( v.split("	"), function( i2,v2 ){
-
+            if( v.trim() != "" ){    
+              row = v.split(" ")  
+              dataList.push({
+                time: row[0].trim().substring(0, 12),
+                price: parseInt(row[1].trim()),
+                type: row[2].trim(),
+                code: filterList2[ row[2].trim() ]
               })
             }
           })
-
-          /*
-          if( $('input[name="sortType"]:checked').val() == "user" ){
-
-            $.each( text.split("\n"), function( i,v ){
-              if( v.trim() != "" && i != 0 ){
-
-                $.each( v.split("	"), function( i2,v2 ){
-
-                  if( v2.trim() != "" ){
-                    if( i2 == 7 || i2 == 8 || i2 == 13 ){
-                      if( $dataList[ ''+v2.trim() +''] === undefined ){
-                        
-                        $dataList[ ''+v2.trim() +''] = {
-                          "first" : 0,
-                          "second" : 0,
-                          "remote" : 0,
-                          "total" : 0 
-                        }
-                      }
-                      
-                      if( i2 == 7 ){
-                        $dataList[ ''+v2.trim() +'']["first"] += 1
-                      }
-                      if( i2 == 8 ){
-                        $dataList[ ''+v2.trim() +'']["second"] += 1
-                      }
-                      if( i2 == 13 ){
-                        $dataList[ ''+v2.trim() +'']["remote"] += 1
-                      }
-                      
-                      $dataList[ ''+v2.trim() +'']["total"] += 1
-                    }
-                  }
-                  
-                } )
-                
-                
-                // $(`<td>
-                //     <div class="checkbox" style="white-space: nowrap;"><label><input type="checkbox" class="fingerprintCardCheckbox" checked> 指紋卡</label></div>
-                //     <div class="checkbox" style="white-space: nowrap;"><label><input type="checkbox" class="DNACheckbox" checked> DNA</label></div>
-                //   </td>`).appendTo( item );
-              }
-            } )
-          }else{
-            
-            $.each( text.split("\n"), function( i,v ){
-              if( v.trim() != "" && i != 0 ){
-
-                $.each( v.split("	"), function( i2,v2 ){
-
-                  if( v2.trim() != "" ){
-                    if( i2 == 4 ){
-                      if( $dataList[ ''+v2.trim() +''] === undefined ){
-                        
-                        $dataList[ ''+v2.trim() +''] = {
-                          "first" : '',
-                          "second" : '',
-                          "remote" : '',
-                          "total" : 0 
-                        }
-                      }                        
-                      
-                      $dataList[ ''+v2.trim() +'']["total"] += 1
-                    }
-                  }
-                  
-                } )
-                
-              }
-            } )
-          }
-          */
           
-          console.log( $dataList )
-
-          // $.each( $dataList, function(i,v){
-          //     var item = $('<tr></tr>');
-          //     $(`<td class="text-center">${i}</td>`).appendTo( item );
-          //     $(`<td class="text-center">${v["first"]}</td>`).appendTo( item );
-          //     $(`<td class="text-center">${v["second"]}</td>`).appendTo( item );
-          //     $(`<td class="text-center">${v["remote"]}</td>`).appendTo( item );
-          //     $(`<td class="text-center">${v["total"]}</td>`).appendTo( item );
-          //     item.appendTo( $('#clipboardContent') );
-
-          // })
-          
-          /*
-          const _sortable = Object.fromEntries(
-              Object.entries( $dataList ).sort(([,a],[,b]) => b["total"]-a["total"])
-          );
-
-          $.each( _sortable, function(i,v){
-              var item = $('<tr></tr>');
-              $(`<td class="text-center">${i}</td>`).appendTo( item );
-              $(`<td class="text-center">${v["first"]}</td>`).appendTo( item );
-              $(`<td class="text-center">${v["second"]}</td>`).appendTo( item );
-              $(`<td class="text-center">${v["remote"]}</td>`).appendTo( item );
-              $(`<td class="text-center">${v["total"]}</td>`).appendTo( item );
-              item.appendTo( $('#clipboardContent') );
-
+          const result = processData(dataList);
+          console.log( result )
+          result.processedData.map( (v, i) => {
+            $('#clipboardContent').append(`<tr>
+              <td>${v.time}</td>
+              <td>${v.price}</td>
+              <td>${v.type}</td>
+              <td>${v.code}</td>
+              <td>${v.benefit["0"]}</td>
+              <td>${v.benefitPrice["0"]}</td>
+              <td>${v.benefitPrice["1"]}</td>
+              <td>${v.benefitPrice["average"]}</td>
+              <td>${v.benefitPrice["2"]}</td>
+              <td>${v.rowBenefitPrice_0}</td>
+              <td>${v.rowBenefitPrice_1}</td>
+              <td>${v.rowBenefitPrice_average}</td>
+              <td>${v.rowBenefitPrice_2}</td>
+            </tr>`)
           })
-          console.log(_sortable);
-          */
+          createCharts(result.processedData);
+          updateSummary(result);
         } )
         .catch(err => {
           console.error('Failed to read clipboard contents: ', err);
