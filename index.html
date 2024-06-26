@@ -146,12 +146,12 @@
           
           $.each( text.split("\n"), function( i,v ){
             if( v.trim() != "" ){    
-              row = v.split("	")  
+              row = v.split(" ")  
               dataList.push({
-                time: row[0],
-                price: row[1],
-                type: row[2],
-                code: filterList2[ row[2] ]
+                time: row[0].trim(),
+                price: row[1].trim(),
+                type: row[2].trim(),
+                code: filterList2[ row[2].trim() ]
               })
             }
           })
