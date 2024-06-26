@@ -5,13 +5,6 @@ $(document).ready(function() {
         { time: "2022-07-05 10:57", price: 14017, type: "平賣", code: "A02" },
         // ... 其他數據
     ];
-$(document).ready(function() {
-    // 假設你的數據已經轉換為 JSON 格式
-    const data = [
-        { time: "2022-07-05 09:54", price: 14257, type: "新買", code: "A01" },
-        { time: "2022-07-05 10:57", price: 14017, type: "平賣", code: "A02" },
-        // ... 其他數據
-    ];
 
     // initializeCharts( data );
 });
