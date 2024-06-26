@@ -93,25 +93,22 @@
         </div>
     </div>
 
-    <div id="app">
-      <h1>交易分析</h1>
-      <div>
-          <canvas id="profitChart"></canvas>
-      </div>
-      <div>
-          <canvas id="winRatioChart"></canvas>
-      </div>
-      <table>
-          <tr>
-              <th>總收益</th>
-              <td>{{ totalBenefitPrice.toFixed(2) }}</td>
-          </tr>
-          <tr>
-              <th>勝率</th>
-              <td>{{ (winRatio * 100).toFixed(2) }}%</td>
-          </tr>
-      </table>
-  </div>
+    <div>
+        <canvas id="profitChart"></canvas>
+    </div>
+    <div>
+        <canvas id="winRatioChart"></canvas>
+    </div>
+    <table>
+        <tr>
+            <th>總收益</th>
+            <td id="totalBenefitPrice"></td>
+        </tr>
+        <tr>
+            <th>勝率</th>
+            <td id="winRatio"></td>
+        </tr>
+    </table>
     <div class="">
         <div class="w-100 p-3 bg-secondary text-center text-white position-absolute bottom-0 container-foot">
         Kuan-Wei © 2024
