@@ -93,12 +93,6 @@
         </div>
     </div>
 
-    <div>
-        <canvas id="profitChart"></canvas>
-    </div>
-    <div>
-        <canvas id="winRatioChart"></canvas>
-    </div>
     <table>
         <tr>
             <th>總收益</th>
@@ -109,6 +103,12 @@
             <td id="winRatio"></td>
         </tr>
     </table>
+    <div>
+        <canvas id="profitChart"></canvas>
+    </div>
+    <div>
+        <canvas id="winRatioChart"></canvas>
+    </div>
     <div class="">
         <div class="w-100 p-3 bg-secondary text-center text-white position-absolute bottom-0 container-foot">
         Kuan-Wei © 2024
@@ -135,23 +135,32 @@
         result={}
         i = 0
         filterList = { 'A01':'新買', 'A02':'平賣', 'A03':'新賣', 'A04':'平買', 'A05':'清倉' }
+        filterList2 = { '新買':'A01', '平賣':'A02', '新賣':'A03', '平買':'A04', '強制平倉':'A05' }
 
         navigator.clipboard.readText()
         .then(text => {
           $analyzeResult = {}
-          $dataList = {}
+          $dataList = []
 
           $('#clipboardContent').empty();
           
           $.each( text.split("\n"), function( i,v ){
-            if( v.trim() != "" && i != 0 ){
-              
-              $.each( v.split("	"), function( i2,v2 ){
-
-              })
+            if( v.trim() != "" ){    
+              row = v.split("	")    
+              $dataList.append({
+                  time: row[0],
+                  price: row[1],
+                  type: row[2],
+                  code: filterList2[ row[2] ]
+              })      
             }
           })
 
+          console.log( $dataList )
+          
+          const { processedData, totalBenefitPrice, winRatio } = processData( $dataList );
+          createCharts(processedData);
+          updateSummary(totalBenefitPrice, winRatio);
           /*
           if( $('input[name="sortType"]:checked').val() == "user" ){
 
@@ -225,7 +234,6 @@
           }
           */
           
-          console.log( $dataList )
 
           // $.each( $dataList, function(i,v){
           //     var item = $('<tr></tr>');
