@@ -72,20 +72,49 @@
         </h1>        
     </div>
     <div class="container-fluid position-relative" >        
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>總收益</th>
+                <th>總收益_1</th>
+                <th>總收益_12_average</th>
+                <th>總收益_2</th>
+                <th>勝率</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="totalBenefitPrice"></td>
+                <td id="totalBenefitPrice_1"></td>
+                <td id="totalBenefitPrice_12_average"></td>
+                <td id="totalBenefitPrice_2"></td>
+                <td id="winRatio"></td>
+              </tr>
+            </tbody>
+        </table>
+        <div>
+            <canvas id="profitChart"></canvas>
+        </div>
+        <div>
+            <canvas id="winRatioChart"></canvas>
+        </div>      
         <div class="table-responsive m-4 rowData">          
             <table class="table caption-top align-middle main-table table-striped" style="white-space: nowrap;">
                 <thead>
                 <tr>
-                    <th>0</th>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                    <th>5</th>
-                    <th>6</th>
-                    <th>7</th>
-                    <th>8</th>
-                    <th>9</th>
+                    <th>時間</th>
+                    <th>價格</th>
+                    <th>類型</th>
+                    <th>代碼</th>
+                    <th>收益</th>
+                    <th>收益價格</th>
+                    <th>收益價格_1</th>
+                    <th>收益價格_12_average</th>
+                    <th>收益價格_2</th>
+                    <th>總收益</th>
+                    <th>總收益_1</th>
+                    <th>總收益_12_average</th>
+                    <th>總收益_2</th>
                 </tr>
                 </thead>
                 <tbody id="clipboardContent" ></tbody>
@@ -93,24 +122,8 @@
         </div>
     </div>
 
-    <table>
-        <tr>
-            <th>總收益</th>
-            <td id="totalBenefitPrice"></td>
-        </tr>
-        <tr>
-            <th>勝率</th>
-            <td id="winRatio"></td>
-        </tr>
-    </table>
-    <div>
-        <canvas id="profitChart"></canvas>
-    </div>
-    <div>
-        <canvas id="winRatioChart"></canvas>
-    </div>
     <div class="">
-        <div class="w-100 p-3 bg-secondary text-center text-white position-absolute bottom-0 container-foot">
+        <div class="w-100 p-3 bg-secondary text-center text-white  bottom-0 container-foot">
         Kuan-Wei © 2024
         </div>
     </div>
@@ -134,7 +147,6 @@
       function printClipbordContent(){
         result={}
         i = 0
-        filterList = { 'A01':'新買', 'A02':'平賣', 'A03':'新賣', 'A04':'平買', 'A05':'清倉' }
         filterList2 = { '新買':'A01', '平賣':'A02', '新賣':'A03', '平買':'A04', '強制平倉':'A05' }
 
         navigator.clipboard.readText()
@@ -148,121 +160,35 @@
             if( v.trim() != "" ){    
               row = v.split(" ")  
               dataList.push({
-                time: row[0].trim(),
-                price: row[1].trim(),
+                time: row[0].trim().substring(0, 12),
+                price: parseInt(row[1].trim()),
                 type: row[2].trim(),
                 code: filterList2[ row[2].trim() ]
               })
             }
           })
-
-          console.log( dataList )
           
-          const { processedData, totalBenefitPrice, winRatio } = processData( dataList );
-          createCharts(processedData);
-          updateSummary(totalBenefitPrice, winRatio);
-          /*
-          if( $('input[name="sortType"]:checked').val() == "user" ){
-
-            $.each( text.split("\n"), function( i,v ){
-              if( v.trim() != "" && i != 0 ){
-
-                $.each( v.split("	"), function( i2,v2 ){
-
-                  if( v2.trim() != "" ){
-                    if( i2 == 7 || i2 == 8 || i2 == 13 ){
-                      if( $dataList[ ''+v2.trim() +''] === undefined ){
-                        
-                        $dataList[ ''+v2.trim() +''] = {
-                          "first" : 0,
-                          "second" : 0,
-                          "remote" : 0,
-                          "total" : 0 
-                        }
-                      }
-                      
-                      if( i2 == 7 ){
-                        $dataList[ ''+v2.trim() +'']["first"] += 1
-                      }
-                      if( i2 == 8 ){
-                        $dataList[ ''+v2.trim() +'']["second"] += 1
-                      }
-                      if( i2 == 13 ){
-                        $dataList[ ''+v2.trim() +'']["remote"] += 1
-                      }
-                      
-                      $dataList[ ''+v2.trim() +'']["total"] += 1
-                    }
-                  }
-                  
-                } )
-                
-                
-                // $(`<td>
-                //     <div class="checkbox" style="white-space: nowrap;"><label><input type="checkbox" class="fingerprintCardCheckbox" checked> 指紋卡</label></div>
-                //     <div class="checkbox" style="white-space: nowrap;"><label><input type="checkbox" class="DNACheckbox" checked> DNA</label></div>
-                //   </td>`).appendTo( item );
-              }
-            } )
-          }else{
-            
-            $.each( text.split("\n"), function( i,v ){
-              if( v.trim() != "" && i != 0 ){
-
-                $.each( v.split("	"), function( i2,v2 ){
-
-                  if( v2.trim() != "" ){
-                    if( i2 == 4 ){
-                      if( $dataList[ ''+v2.trim() +''] === undefined ){
-                        
-                        $dataList[ ''+v2.trim() +''] = {
-                          "first" : '',
-                          "second" : '',
-                          "remote" : '',
-                          "total" : 0 
-                        }
-                      }                        
-                      
-                      $dataList[ ''+v2.trim() +'']["total"] += 1
-                    }
-                  }
-                  
-                } )
-                
-              }
-            } )
-          }
-          */
-          
-
-          // $.each( $dataList, function(i,v){
-          //     var item = $('<tr></tr>');
-          //     $(`<td class="text-center">${i}</td>`).appendTo( item );
-          //     $(`<td class="text-center">${v["first"]}</td>`).appendTo( item );
-          //     $(`<td class="text-center">${v["second"]}</td>`).appendTo( item );
-          //     $(`<td class="text-center">${v["remote"]}</td>`).appendTo( item );
-          //     $(`<td class="text-center">${v["total"]}</td>`).appendTo( item );
-          //     item.appendTo( $('#clipboardContent') );
-
-          // })
-          
-          /*
-          const _sortable = Object.fromEntries(
-              Object.entries( $dataList ).sort(([,a],[,b]) => b["total"]-a["total"])
-          );
-
-          $.each( _sortable, function(i,v){
-              var item = $('<tr></tr>');
-              $(`<td class="text-center">${i}</td>`).appendTo( item );
-              $(`<td class="text-center">${v["first"]}</td>`).appendTo( item );
-              $(`<td class="text-center">${v["second"]}</td>`).appendTo( item );
-              $(`<td class="text-center">${v["remote"]}</td>`).appendTo( item );
-              $(`<td class="text-center">${v["total"]}</td>`).appendTo( item );
-              item.appendTo( $('#clipboardContent') );
-
+          const { processedData, totalBenefitPrice, totalBenefitPrice_1, totalBenefitPrice_2, totalBenefitPrice_12_average, winRatio } = processData(dataList);
+          console.log( processedData )
+          processedData.map( (v, i) => {
+            $('#clipboardContent').append(`<tr>
+              <td>${v.time}</td>
+              <td>${v.price}</td>
+              <td>${v.type}</td>
+              <td>${v.code}</td>
+              <td>${v.benefit}</td>
+              <td>${v.benefitPrice}</td>
+              <td>${v.benefitPrice_1}</td>
+              <td>${v.benefitPrice_12_average}</td>
+              <td>${v.benefitPrice_2}</td>
+              <td>${v.totalBenefitPrice}</td>
+              <td>${v.totalBenefitPrice_1}</td>
+              <td>${v.totalBenefitPrice_12_average}</td>
+              <td>${v.totalBenefitPrice_2}</td>
+            </tr>`)
           })
-          console.log(_sortable);
-          */
+          createCharts(processedData);
+          updateSummary(totalBenefitPrice, totalBenefitPrice_1, totalBenefitPrice_2, totalBenefitPrice_12_average, winRatio);
         } )
         .catch(err => {
           console.error('Failed to read clipboard contents: ', err);
