@@ -170,7 +170,7 @@ function createCharts(processedData) {
             {
                 label: '累計收益-1.5',
                 data: processedData.map(t => t.rowBenefitPrice_average),
-                borderColor: 'yellow',
+                borderColor: 'blue',
                 fill: false
             }
             ]
