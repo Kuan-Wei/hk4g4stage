@@ -67,8 +67,9 @@
       
         <h1 class="m-4">
             <!-- <img class="pe-3" src='../img/CI-1.png' height="60"/> -->
-            剪貼簿內容分析 <small>20240701.01</small>
-            <button class="btn btn-primary pull-right" onclick="printClipbordContent()">貼上剪貼簿內容</button> 
+            剪貼簿內容分析 <small class="fs-5">20240718.01</small>
+            <button class="btn btn-primary pull-right" onclick="printClipbordContent()">貼上剪貼簿內容(大台)</button> 
+            <button class="btn btn-primary pull-right" onclick="printClipbordContent('MXF')">貼上剪貼簿內容(小台)</button> 
         </h1>        
     </div>
     <div class="container-fluid position-relative" >        
@@ -225,7 +226,7 @@
       function resizeWindow(){			
         $('.rowData').css("height",( $( this ).height() - $( '.container-head' )[0].offsetHeight - $( '.container-foot' )[0].offsetHeight*2 )+"px")	
       }
-      function printClipbordContent(){
+      function printClipbordContent( type = 'TXF' ){
         result={}
         i = 0
         filterList2 = { '新買':'A01', '平賣':'A02', '新賣':'A03', '平買':'A04', '強制平倉':'A05' }
@@ -249,7 +250,7 @@
             }
           })
           
-          const result = processData(dataList);
+          const result = processData(dataList, type);
           console.log( result )
           result.processedData.map( (v, i) => {
             $('#clipboardContent').append(`<tr>

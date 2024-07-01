@@ -11,7 +11,7 @@ $(document).ready(function() {
 
 let profitChart, winRatioChart;  // 宣告圖表變數
 
-function processData(data) {
+function processData(data, type='TXF') {
     let newBuy = false;
     let newSale = false;
     let loopList = ["0", "1", "2", "average"]
@@ -41,7 +41,11 @@ function processData(data) {
             benefit["average"] = benefit["0"]-1.5;
             
             for (let loop of loopList) {
-                benefitPrice[loop] = benefit[loop] * 200 - 260;
+                if( type == 'TXF' ) {
+                    benefitPrice[loop] = benefit[loop] * 200 - 260;
+                }else{
+                    benefitPrice[loop] = benefit[loop] * 50 - 86;                    
+                }
                 if (benefit[loop] > 0) {
                     winPrice[loop] += benefit[loop];
                     winTimes[loop]++;
