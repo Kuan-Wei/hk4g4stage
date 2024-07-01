@@ -236,6 +236,7 @@ function updateSummary(datasets) {
         $("#expectedValue_" + loop).text((datasets.winRatio[loop] * datasets.winPrice[loop] + (1 - datasets.winRatio[loop]) * datasets.losePrice[loop] ).toFixed(2));
         $("#maxBackValue_" + loop).text(datasets.maxBackValue[loop] );
         $('#roi_' + loop).text((datasets.totalBenefitPrice[loop] /(2*218000) * 100).toFixed(2) + "%");
+        $('#acc_roi_' + loop).text((datasets.totalBenefitPrice[loop] /(2*218000-datasets.maxBackValue[loop]) * 100).toFixed(2) + "%");
     }
 }
     
