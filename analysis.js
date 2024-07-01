@@ -148,24 +148,25 @@ function createCharts(processedData) {
         type: 'line',
         data: {
             labels: processedData.map(t => t.time),
-            datasets: [{
-                label: '累計收益',
-                data: processedData.map(t => t.rowBenefitPrice_0),
-                borderColor: 'blue',
-                fill: false
-            },
-            {
-                label: '累計收益-1',
-                data: processedData.map(t => t.rowBenefitPrice_1),
-                borderColor: 'red',
-                fill: false
-            },
-            {
-                label: '累計收益-2',
-                data: processedData.map(t => t.rowBenefitPrice_2),
-                borderColor: 'green',
-                fill: false
-            },
+            datasets: [
+            // {
+            //     label: '累計收益',
+            //     data: processedData.map(t => t.rowBenefitPrice_0),
+            //     borderColor: 'blue',
+            //     fill: false
+            // },
+            // {
+            //     label: '累計收益-1',
+            //     data: processedData.map(t => t.rowBenefitPrice_1),
+            //     borderColor: 'red',
+            //     fill: false
+            // },
+            // {
+            //     label: '累計收益-2',
+            //     data: processedData.map(t => t.rowBenefitPrice_2),
+            //     borderColor: 'green',
+            //     fill: false
+            // },
             {
                 label: '累計收益-1.5',
                 data: processedData.map(t => t.rowBenefitPrice_average),
