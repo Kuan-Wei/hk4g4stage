@@ -236,7 +236,7 @@ function updateSummary(datasets, type='TXF') {
     $("#totalTimes").text(datasets.winTimes["0"] + datasets.loseTimes["0"]);    
 
     // 新增成本變數，若type為TXF，則成本為218000，若type為MTX，則成本為61000
-    let cause = ( type == 'TXF ')? 218000 : 61000; 
+    let cause = ( type == 'TXF')? 218000 : 61000; 
 
     let loopList = ["0", "1", "2", "average"]
     for (let loop of loopList) {
