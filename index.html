@@ -67,7 +67,7 @@
       
         <h1 class="m-4">
             <!-- <img class="pe-3" src='../img/CI-1.png' height="60"/> -->
-            剪貼簿內容分析 <small class="fs-5">20240718.02</small>
+            剪貼簿內容分析 <small class="fs-5">20240718.03</small>
             <button class="btn btn-primary pull-right" onclick="printClipbordContent()">貼上剪貼簿內容(大台)</button> 
             <button class="btn btn-primary pull-right" onclick="printClipbordContent('MXF')">貼上剪貼簿內容(小台)</button> 
         </h1>        
@@ -75,12 +75,14 @@
     <div class="container-fluid position-relative" >        
         <table class="table table-striped">
               <tr>
+                <th>標的</th>
                 <th>正點數</th>
                 <th>負點數</th>
                 <th>總點數</th>
                 <th>總次數</th>
               </tr>
               <tr>
+                <td id="typeTarget"></td>
                 <td id="winPrice"></td>
                 <td id="losePrice"></td>
                 <td id="totalPrice"></td>
@@ -214,7 +216,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="analysis.js?2024071801"></script>
+    <script src="analysis.js?2024071803"></script>
     <script type="text/javascript">
       $(function(){          //reference
 
@@ -249,6 +251,8 @@
               })
             }
           })
+
+          $('#typeTarget').text( type == 'TXF'? '大台' : '小台' )
           
           const result = processData(dataList, type);
           console.log( result )
@@ -269,7 +273,7 @@
               <td>${v.rowBenefitPrice_2}</td>
             </tr>`)
           })
-          createCharts(result.processedData);
+          createCharts(result.processedData, type);
           updateSummary(result);
         } )
         .catch(err => {

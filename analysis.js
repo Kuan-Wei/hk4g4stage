@@ -78,7 +78,11 @@ function processData(data, type='TXF') {
             benefit["average"] = benefit["0"]-1.5;
             
             for (let loop of loopList) {
-                benefitPrice[loop] = benefit[loop] * 200 - 260;
+                if( type == 'TXF' ) {
+                    benefitPrice[loop] = benefit[loop] * 200 - 260;
+                }else{
+                    benefitPrice[loop] = benefit[loop] * 50 - 86;                    
+                }
                 if (benefit[loop] > 0) {
                     winPrice[loop] += benefit[loop];
                     winTimes[loop]++;
@@ -225,11 +229,14 @@ function createCharts(processedData) {
     */
 }
 
-function updateSummary(datasets) {
+function updateSummary(datasets, type='TXF') {
     $("#winPrice").text(datasets.winPrice["0"]);
     $("#losePrice").text(datasets.losePrice["0"]);
     $("#totalPrice").text(datasets.winPrice["0"] + datasets.losePrice["0"]);
     $("#totalTimes").text(datasets.winTimes["0"] + datasets.loseTimes["0"]);    
+
+    // 新增成本變數，若type為TXF，則成本為218000，若type為MTX，則成本為61000
+    let cause = ( type == 'TXF ')? 218000 : 61000; 
 
     let loopList = ["0", "1", "2", "average"]
     for (let loop of loopList) {
@@ -240,8 +247,8 @@ function updateSummary(datasets) {
         $("#loseRatio_" + loop).text(((1 - datasets.winRatio[loop]) * 100).toFixed(2) + "%").css("color", datasets.winRatio[loop] > 0.5 ? "red" : "green");
         $("#expectedValue_" + loop).text((datasets.winRatio[loop] * datasets.winPrice[loop] + (1 - datasets.winRatio[loop]) * datasets.losePrice[loop] ).toFixed(2));
         $("#maxBackValue_" + loop).text(datasets.maxBackValue[loop] );
-        $('#roi_' + loop).text((datasets.totalBenefitPrice[loop] /(2*218000) * 100).toFixed(2) + "%");
-        $('#acc_roi_' + loop).text((datasets.totalBenefitPrice[loop] /(2*(218000-datasets.maxBackValue[loop])) * 100).toFixed(2) + "%");
+        $('#roi_' + loop).text((datasets.totalBenefitPrice[loop] /(2*cause) * 100).toFixed(2) + "%");
+        $('#acc_roi_' + loop).text((datasets.totalBenefitPrice[loop] /(2*(cause-datasets.maxBackValue[loop])) * 100).toFixed(2) + "%");
     }
 }
     
