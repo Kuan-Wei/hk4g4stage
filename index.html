@@ -58,6 +58,7 @@
         }
         #profitChart{
           max-height: 600px;
+          height: 0px;
         }
         /* .edit_content{
 
@@ -70,7 +71,7 @@
       
         <h1 class="m-4">
             <!-- <img class="pe-3" src='../img/CI-1.png' height="60"/> -->
-            剪貼簿內容分析 <small class="fs-5">20240718.05</small>
+            剪貼簿內容分析 <small class="fs-5">20240726.01</small>
             <button class="btn btn-primary pull-right" onclick="printClipbordContent()">貼上剪貼簿內容(大台)</button> 
             <button class="btn btn-primary pull-right" onclick="printClipbordContent('MXF')">貼上剪貼簿內容(小台)</button> 
         </h1>        
@@ -179,13 +180,14 @@
                 <td id="acc_roi_2"></td>
               </tr> -->
         </table>
-        <div>
+        <div class="m-2">
             <canvas id="profitChart"></canvas>
         </div>
-        <div>
+        <!-- <div>
             <canvas id="winRatioChart"></canvas>
-        </div>      
-        <div class="table-responsive m-4 rowData">          
+        </div>       -->
+        <div class="table-responsive m-1 rowData">    
+          <h3>交易紀錄</h3>      
             <table class="table caption-top align-middle main-table table-striped" style="white-space: nowrap;">
                 <thead>
                 <tr>
@@ -260,7 +262,8 @@
           const result = processData(dataList, type);
           console.log( result )
           result.processedData.map( (v, i) => {
-            $('#clipboardContent').append(`<tr>
+            if( v.code != undefined ){
+              $('#clipboardContent').append(`<tr>
               <td>${v.time}</td>
               <td>${v.price}</td>
               <td>${v.type}</td>
@@ -275,6 +278,7 @@
               <td>${v.rowBenefitPrice_average}</td>
               <td>${v.rowBenefitPrice_2}</td>
             </tr>`)
+            }
           })
           createCharts(result.processedData);
           updateSummary(result, type);
