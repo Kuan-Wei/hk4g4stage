@@ -27,15 +27,56 @@ function processData(data, type='TXF') {
     let maxBackValue = {"0":0, "1":0, "2":0, "average":0};
     let maxValue = {"0":0, "1":0, "2":0, "average":0};
     let winRatio = {"0":0, "1":0, "2":0, "average":0};
+    let buyPrice = 0;
+    let sellPrice = 0;
 
     const processedData = data.map((trade, index) => {
         const nextTrade = data[index + 1] || {};
         let benefit = {"0":0, "1":0, "2":0, "average":0};
         let benefitPrice = {"0":0, "1":0, "2":0, "average":0};
+        let needCalculate = false;
+
 
         if (trade.code === 'A01' && !newBuy) {
             newBuy = true;
-            benefit["0"] = nextTrade.price - trade.price;
+            buyPrice = trade.price;
+        }
+
+        if (trade.code === 'A02'){
+            newBuy = false;
+            benefit["0"] = trade.price - buyPrice;
+
+            buyPrice = 0;
+            needCalculate = true;
+            
+        } 
+        if (trade.code === 'A03' && !newSale) {
+            newSale = true;
+            sellPrice = trade.price;
+        }
+
+        if (trade.code === 'A04'){
+            newSale = false;
+            benefit["0"] = sellPrice - trade.price ;
+
+            sellPrice = 0;
+            needCalculate = true
+        }
+
+        if (trade.code === 'A05') {
+            if (newBuy) {
+                benefit["0"] = trade.price - buyPrice;
+                newBuy = false;
+            }
+            if (newSale) {
+                benefit["0"] = sellPrice - trade.price ;
+                newSale = false;
+            }
+
+            needCalculate = true;
+        }
+
+        if(needCalculate){
             benefit["1"] = benefit["0"]-1;
             benefit["2"] = benefit["0"]-2;
             benefit["average"] = benefit["0"]-1.5;
@@ -65,56 +106,10 @@ function processData(data, type='TXF') {
             rowBenefitPrice_1 += benefitPrice["1"];
             rowBenefitPrice_2 += benefitPrice["2"];
             rowBenefitPrice_average += benefitPrice["average"];
+
+            needCalculate = false;
         }
 
-        if (trade.code === 'A02') newBuy = false;
-        if (trade.code === 'A02') newBuy = false;
-
-        if (trade.code === 'A03' && !newSale) {
-            newSale = true;
-            benefit["0"] = trade.price - nextTrade.price;
-            benefit["1"] = benefit["0"]-1;
-            benefit["2"] = benefit["0"]-2;
-            benefit["average"] = benefit["0"]-1.5;
-            
-            for (let loop of loopList) {
-                if( type == 'TXF' ) {
-                    benefitPrice[loop] = benefit[loop] * 200 - 260;
-                }else{
-                    benefitPrice[loop] = benefit[loop] * 50 - 86;                    
-                }
-                if (benefit[loop] > 0) {
-                    winPrice[loop] += benefit[loop];
-                    winTimes[loop]++;
-                }
-                else {
-                    losePrice[loop] += benefit[loop];
-                    loseTimes[loop]++;
-                }
-                winRatio[loop] = winTimes[loop] / (winTimes[loop] + loseTimes[loop]);
-                totalBenefitPrice[loop] += benefitPrice[loop];
-                if (totalBenefitPrice[loop] > maxValue[loop]) maxValue[loop] = totalBenefitPrice[loop];
-                if (totalBenefitPrice[loop] < maxValue[loop]) {
-                    maxBackValue[loop] = Math.min(maxBackValue[loop], totalBenefitPrice[loop] - maxValue[loop]);
-                }
-            }
-            rowBenefitPrice_0 += benefitPrice["0"];
-            rowBenefitPrice_1 += benefitPrice["1"];
-            rowBenefitPrice_2 += benefitPrice["2"];
-            rowBenefitPrice_average += benefitPrice["average"];
-        }
-
-        if (trade.code === 'A04') newSale = false;
-        if (trade.code === 'A04') newSale = false;
-
-        if (trade.code === 'A05') {
-            newBuy = false;
-            newSale = false;
-        }
-        if (trade.code === 'A05') {
-            newBuy = false;
-            newSale = false;
-        }
 
         return {
             ...trade,
