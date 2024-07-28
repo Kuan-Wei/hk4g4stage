@@ -14,26 +14,29 @@ let profitChart, winRatioChart;  // 宣告圖表變數
 function processData(data, type='TXF') {
     let newBuy = false;
     let newSale = false;
-    let loopList = ["0", "1", "2", "average"]
-    let totalBenefitPrice = {"0":0, "1":0, "2":0, "average":0};
+    let loopList = ["0", "1", "2", "average"];
+    let tradeType = "";
+    let totalBenefitPrice = {"0":0, "1":0, "2":0, "average":0, "buy":0, "sell":0};
     let rowBenefitPrice_0 = 0;
     let rowBenefitPrice_1 = 0;
     let rowBenefitPrice_2 = 0;
     let rowBenefitPrice_average = 0;
-    let winTimes = {"0":0, "1":0, "2":0, "average":0};
-    let loseTimes = {"0":0, "1":0, "2":0, "average":0};
-    let winPrice = {"0":0, "1":0, "2":0, "average":0};
-    let losePrice = {"0":0, "1":0, "2":0, "average":0};
-    let maxBackValue = {"0":0, "1":0, "2":0, "average":0};
-    let maxValue = {"0":0, "1":0, "2":0, "average":0};
-    let winRatio = {"0":0, "1":0, "2":0, "average":0};
+    let rowBenefitPrice_buy = 0;
+    let rowBenefitPrice_sell = 0;
+    let winTimes = {"0":0, "1":0, "2":0, "average":0, "buy":0, "sell":0};
+    let loseTimes = {"0":0, "1":0, "2":0, "average":0, "buy":0, "sell":0};
+    let winPrice = {"0":0, "1":0, "2":0, "average":0, "buy":0, "sell":0};
+    let losePrice = {"0":0, "1":0, "2":0, "average":0, "buy":0, "sell":0};
+    let maxBackValue = {"0":0, "1":0, "2":0, "average":0, "buy":0, "sell":0};
+    let maxValue = {"0":0, "1":0, "2":0, "average":0, "buy":0, "sell":0};
+    let winRatio = {"0":0, "1":0, "2":0, "average":0, "buy":0, "sell":0};
     let buyPrice = 0;
     let sellPrice = 0;
 
     const processedData = data.map((trade, index) => {
         const nextTrade = data[index + 1] || {};
-        let benefit = {"0":0, "1":0, "2":0, "average":0};
-        let benefitPrice = {"0":0, "1":0, "2":0, "average":0};
+        let benefit = {"0":0, "1":0, "2":0, "average":0, "buy":0, "sell":0};
+        let benefitPrice = {"0":0, "1":0, "2":0, "average":0, "buy":0, "sell":0};
         let needCalculate = false;
 
 
@@ -48,7 +51,7 @@ function processData(data, type='TXF') {
 
             buyPrice = 0;
             needCalculate = true;
-            
+            tradeType = "buy";
         } 
         if (trade.code === 'A03' && !newSale) {
             newSale = true;
@@ -61,6 +64,7 @@ function processData(data, type='TXF') {
 
             sellPrice = 0;
             needCalculate = true
+            tradeType = "sell";
         }
 
         if (trade.code === 'A05') {
@@ -80,7 +84,10 @@ function processData(data, type='TXF') {
             benefit["1"] = benefit["0"]-1;
             benefit["2"] = benefit["0"]-2;
             benefit["average"] = benefit["0"]-1.5;
-            
+            benefit[tradeType] = benefit["average"];
+
+            loopList.push(tradeType);
+
             for (let loop of loopList) {
                 if( type == 'TXF' ) {
                     benefitPrice[loop] = benefit[loop] * 200 - 260;
@@ -102,10 +109,14 @@ function processData(data, type='TXF') {
                     maxBackValue[loop] = Math.min(maxBackValue[loop], totalBenefitPrice[loop] - maxValue[loop]);
                 }
             }            
+            loopList.pop();
+
             rowBenefitPrice_0 += benefitPrice["0"];
             rowBenefitPrice_1 += benefitPrice["1"];
             rowBenefitPrice_2 += benefitPrice["2"];
             rowBenefitPrice_average += benefitPrice["average"];
+            rowBenefitPrice_buy += benefitPrice["buy"];
+            rowBenefitPrice_sell += benefitPrice["sell"];
 
             needCalculate = false;
         }
@@ -119,6 +130,8 @@ function processData(data, type='TXF') {
             rowBenefitPrice_1,
             rowBenefitPrice_2,
             rowBenefitPrice_average,
+            rowBenefitPrice_buy,
+            rowBenefitPrice_sell,
             winTimes,
             winPrice,
             loseTimes,
@@ -164,14 +177,20 @@ function createCharts(processedData) {
             //     borderColor: 'red',
             //     fill: false
             // },
-            // {
-            //     label: '累計收益-2',
-            //     data: processedData.map(t => t.rowBenefitPrice_2),
-            //     borderColor: 'green',
-            //     fill: false
-            // },
             {
-                label: '累計收益-1.5',
+                label: '累計收益-多單',
+                data: processedData.map(t => t.rowBenefitPrice_buy),
+                borderColor: 'red',
+                fill: false
+            },
+            {
+                label: '累計收益-空單',
+                data: processedData.map(t => t.rowBenefitPrice_sell),
+                borderColor: 'green',
+                fill: false
+            },
+            {
+                label: '累計收益-綜合',
                 data: processedData.map(t => t.rowBenefitPrice_average),
                 borderColor: 'blue',
                 fill: false

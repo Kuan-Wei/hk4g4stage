@@ -71,7 +71,7 @@
       
         <h1 class="m-4">
             <!-- <img class="pe-3" src='../img/CI-1.png' height="60"/> -->
-            剪貼簿內容分析 <small class="fs-5">20240728.01</small>
+            剪貼簿內容分析 <small class="fs-5">20240729.01</small>
             <button class="btn btn-primary pull-right" onclick="printClipbordContent()">貼上剪貼簿內容(大台)</button> 
             <button class="btn btn-primary pull-right" onclick="printClipbordContent('MXF')">貼上剪貼簿內容(小台)</button> 
         </h1>        
@@ -195,15 +195,14 @@
                     <th>價格</th>
                     <th>類型</th>
                     <th>代碼</th>
-                    <th>收益</th>
-                    <th>收益價格</th>
-                    <th>收益價格_1</th>
-                    <th>收益價格_1.5</th>
-                    <th>收益價格_2</th>
-                    <th>總收益</th>
-                    <th>總收益_1</th>
-                    <th>總收益_1.5</th>
-                    <th>總收益_2</th>
+                    <th>點數</th>
+                    <th>獲利</th>
+                    <th>滑價1.5</th>
+                    <th>做多</th>
+                    <th>累積獲利_多</th>
+                    <th>做空</th>
+                    <th>累積獲利_空</th>
+                    <th>累積獲利_滑價</th>
                 </tr>
                 </thead>
                 <tbody id="clipboardContent" ></tbody>
@@ -221,7 +220,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="analysis.js?2024072801"></script>
+    <script src="analysis.js?2024072901"></script>
     <script type="text/javascript">
       $(function(){          //reference
 
@@ -270,13 +269,12 @@
               <td>${v.code}</td>
               <td>${v.benefit["0"]}</td>
               <td>${v.benefitPrice["0"]}</td>
-              <td>${v.benefitPrice["1"]}</td>
               <td>${v.benefitPrice["average"]}</td>
-              <td>${v.benefitPrice["2"]}</td>
-              <td>${v.rowBenefitPrice_0}</td>
-              <td>${v.rowBenefitPrice_1}</td>
+              <td>${v.benefitPrice["buy"]}</td>
+              <td>${v.rowBenefitPrice_buy}</td>
+              <td>${v.benefitPrice["sell"]}</td>
+              <td>${v.rowBenefitPrice_sell}</td>
               <td>${v.rowBenefitPrice_average}</td>
-              <td>${v.rowBenefitPrice_2}</td>
             </tr>`)
             }
           })
