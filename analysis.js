@@ -72,10 +72,12 @@ function processData(data, type='TXF') {
                 if (newBuy) {
                     benefit["0"] = trade.price - buyPrice;
                     newBuy = false;
+                    tradeType = "buy";
                 }
                 if (newSale) {
                     benefit["0"] = sellPrice - trade.price ;
                     newSale = false;
+                    tradeType = "sell";
                 }
 
                 needCalculate = true;

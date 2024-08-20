@@ -72,7 +72,7 @@
       
         <h1 class="m-4">
             <img class="pe-3" src='stock-1.png' height="60"/>
-            剪貼簿分析 <small class="fs-5">20240820.03</small>
+            剪貼簿分析 <small class="fs-5">20241029.01</small>
             <button class="btn btn-primary pull-right" onclick="printClipbordContent()">貼上剪貼簿內容(大台)</button> 
             <button class="btn btn-primary pull-right" onclick="printClipbordContent('MXF')">貼上剪貼簿內容(小台)</button> 
         </h1>        
@@ -255,9 +255,9 @@
       function removeTrailingZeros(s) {
           let ss = parseFloat(s).toString();
 
-          if (ss.includes('.0')) {
-              ss = ss.replace('.0', '');
-          }
+          // if (ss.includes('.0')) {
+          //     ss = ss.replace('.0', '');
+          // }
 
           return ss;
       }
