@@ -72,7 +72,7 @@
       
         <h1 class="m-4">
             <img class="pe-3" src='stock-1.png' height="60"/>
-            剪貼簿分析 <small class="fs-5">20240820.02</small>
+            剪貼簿分析 <small class="fs-5">20240820.03</small>
             <button class="btn btn-primary pull-right" onclick="printClipbordContent()">貼上剪貼簿內容(大台)</button> 
             <button class="btn btn-primary pull-right" onclick="printClipbordContent('MXF')">貼上剪貼簿內容(小台)</button> 
         </h1>        
@@ -243,6 +243,25 @@
       function resizeWindow(){			
         $('.rowData').css("height",( $( this ).height() - $( '.container-head' )[0].offsetHeight - $( '.container-foot' )[0].offsetHeight*2 )+"px")	
       }
+
+      /**
+       * 移除字串中尾部的零。
+       * @param {string} s - 要處理的字串。
+       * @returns {string} - 移除尾部零後的字串。
+       * 範例：
+       * console.log(removeTrailingZeros('10.00')); // '10'
+       * console.log(removeTrailingZeros('5.50')); // '5.5'
+       */
+      function removeTrailingZeros(s) {
+          let ss = parseFloat(s).toString();
+
+          if (ss.includes('.0')) {
+              ss = ss.replace('.0', '');
+          }
+
+          return ss;
+      }
+
       function printClipbordContent( type = 'TXF' ){
         result={}
         i = 0
@@ -258,14 +277,10 @@
           $.each( text.split("\n"), function( i,v ){
             if( v.trim() != "" ){    
               if( v.indexOf('參數') > -1 ){
-                // 將v中多餘的0去掉
-                v = v.replace(/0+/g, '0')
-                v = v.replace(/\.0/g, '')
-                v = v.replace(/ /g, '&nbsp;&nbsp;&nbsp;')
                 if( v.indexOf('多單') > -1 ){
-                  $('#butPars').html( v.replace('多單參數', '') )                
+                  $('#butPars').html( v.split("多單參數")[0].trim().split(' ').map(num => removeTrailingZeros(num)).join(' ').replaceAll(' ', ' | ') )               
                 }else if( v.indexOf('空單') > -1 ){
-                  $('#sellPars').html( v.replace('空單參數', '' ) )
+                  $('#sellPars').html( v.split("空單參數")[0].trim().split(' ').map(num => removeTrailingZeros(num)).join(' ').replaceAll(' ', ' | ') )
                 }
                 
               }else{
