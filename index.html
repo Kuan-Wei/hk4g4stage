@@ -71,7 +71,7 @@
       
         <h1 class="m-4">
             <!-- <img class="pe-3" src='../img/CI-1.png' height="60"/> -->
-            剪貼簿內容分析 <small class="fs-5">20240731.01</small>
+            剪貼簿分析 <small class="fs-5">20240820.01</small>
             <button class="btn btn-primary pull-right" onclick="printClipbordContent()">貼上剪貼簿內容(大台)</button> 
             <button class="btn btn-primary pull-right" onclick="printClipbordContent('MXF')">貼上剪貼簿內容(小台)</button> 
         </h1>        
@@ -80,17 +80,27 @@
         <table class="table table-striped">
               <tr>
                 <th>標的</th>
-                <th>正點數</th>
-                <th>負點數</th>
-                <th>總點數</th>
-                <th>總次數</th>
+                <th colspan="4">多單參數</th>
+                <th colspan="4">空單參數</th>
               </tr>
               <tr>
                 <td id="typeTarget"></td>
-                <td id="winPrice"></td>
-                <td id="losePrice"></td>
-                <td id="totalPrice"></td>
-                <td id="totalTimes"></td>
+                <td id="butPars" colspan="4"></td>
+                <td id="sellPars" colspan="4"></td>
+              </tr>
+              <tr>
+                <th></th>
+                <th colspan="2">正點數</th>
+                <th colspan="2">負點數</th>
+                <th colspan="2">總點數</th>
+                <th colspan="2">總次數</th>
+              </tr>
+              <tr>
+                <td></td>
+                <td id="winPrice" colspan="2"></td>
+                <td id="losePrice" colspan="2"></td>
+                <td id="totalPrice" colspan="2"></td>
+                <td id="totalTimes" colspan="2"></td>
               </tr>
               <!-- <tr>
                 <th>滑價0點累計獲利</th>
@@ -246,13 +256,26 @@
           
           $.each( text.split("\n"), function( i,v ){
             if( v.trim() != "" ){    
-              row = v.split(" ")  
-              dataList.push({
-                time: row[0].trim().substring(0, 12),
-                price: parseInt(row[1].trim()),
-                type: row[2].trim(),
-                code: filterList2[ row[2].trim() ]
-              })
+              if( v.indexOf('參數') > -1 ){
+                // 將v中多餘的0去掉
+                v = v.replace(/0+/g, '0')
+                v = v.replace(/\.0/g, '')
+                v = v.replace(/ /g, '&nbsp;&nbsp;&nbsp;')
+                if( v.indexOf('多單') > -1 ){
+                  $('#butPars').html( v.replace('多單參數', '') )                
+                }else if( v.indexOf('空單') > -1 ){
+                  $('#sellPars').html( v.replace('空單參數', '' ) )
+                }
+                
+              }else{
+                row = v.split(" ")  
+                dataList.push({
+                  time: row[0].trim().substring(0, 12),
+                  price: parseInt(row[1].trim()),
+                  type: row[2].trim(),
+                  code: filterList2[ row[2].trim() ]
+                })
+              }
             }
           })
 
