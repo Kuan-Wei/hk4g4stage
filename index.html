@@ -72,7 +72,7 @@
       
         <h1 class="m-4">
             <img class="pe-3" src='stock-1.png' height="60"/>
-            剪貼簿分析 <small class="fs-5">20241029.02</small>
+            剪貼簿分析 <small class="fs-5">20241101.01</small>
             <button class="btn btn-primary pull-right" onclick="printClipbordContent()">貼上剪貼簿內容(大台)</button> 
             <button class="btn btn-primary pull-right" onclick="printClipbordContent('MXF')">貼上剪貼簿內容(小台)</button> 
         </h1>        
@@ -197,6 +197,56 @@
         <!-- <div>
             <canvas id="winRatioChart"></canvas>
         </div>       -->
+        <div class="container-fluid mb-5">
+          <div class="row">
+            <div class="col-md-4 ">
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">總體績效</h3>
+                  <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                  <p class="card-text">總交易筆數：<span id="s1_1"></span></p>
+                  <p class="card-text">多單交易筆數：<span id="s1_2"></span></p>
+                  <p class="card-text">空單交易筆數：<span id="s1_3"></span></p>
+                  <p class="card-text">總獲利點數：<span id="s1_4"></span></p>
+                  <p class="card-text">多單獲利：<span id="s1_5"></span></p>
+                  <p class="card-text">空單獲利：<span id="s1_6"></span></p>
+                  <p class="card-text">總勝率：<span id="s1_7"></span></p>
+                  <p class="card-text">總敗率：<span id="s1_8"></span></p>
+                  <p class="card-text">多單單日累積最大獲利：<span id="s1_9"></span></p>
+                  <p class="card-text">空單單日累積最大獲利：<span id="s1_10"></span></p>
+                </div>
+              </div>              
+            </div>
+            <div class="col-md-4 ">
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">多單績效</h3>
+                  <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                  <p class="card-text">多單交易筆數：<span id="s2_1"></span></p>
+                  <p class="card-text">多單獲利：<span id="s2_2"></span></p>
+                  <p class="card-text">多單勝率：<span id="s2_3"></span></p>
+                  <p class="card-text">多單敗率：<span id="s2_4"></span></p>
+                  <p class="card-text">多單單日累積最大獲利：<span id="s2_5"></span> (<span class="text-secondary" id="s2_5a"></span>)</p>
+                  <p class="card-text">多單單日累積最大虧損：<span id="s2_6"></span> (<span class="text-secondary" id="s2_6a"></span>)</p>
+                </div>
+              </div>              
+            </div>
+            <div class="col-md-4 ">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">空單績效</h5>
+                  <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                  <p class="card-text">空單交易筆數：<span id="s3_1"></span></p>
+                  <p class="card-text">空單獲利：<span id="s3_2"></span></p>
+                  <p class="card-text">空單勝率：<span id="s3_3"></span></p>
+                  <p class="card-text">空單敗率：<span id="s3_4"></span></p>
+                  <p class="card-text">空單單日累積最大獲利：<span id="s3_5"></span> (<span class="text-secondary" id="s3_5a"></span>)</p>
+                  <p class="card-text">空單單日累積最大虧損：<span id="s3_6"></span> (<span class="text-secondary" id="s3_6a"></span>)</p>
+                </div>
+              </div>              
+            </div>
+          </div>
+        </div>
         <div class="table-responsive m-1 rowData">    
           <h3>交易紀錄</h3>      
             <table class="table caption-top align-middle main-table table-striped" style="white-space: nowrap;">
@@ -231,7 +281,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="analysis.js?20241029"></script>
+    <script src="analysis.js?20241101"></script>
     <script type="text/javascript">
       $(function(){          //reference
 
@@ -286,6 +336,7 @@
               }else{
                 row = v.split(" ")  
                 dataList.push({
+                  date: row[0].trim().substring(0, 8),
                   time: row[0].trim().substring(0, 12),
                   price: parseInt(row[1].trim()),
                   type: row[2].trim(),

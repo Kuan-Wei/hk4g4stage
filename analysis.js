@@ -32,6 +32,7 @@ function processData(data, type='TXF') {
     let winRatio = {"0":0, "1":0, "2":0, "average":0, "buy":0, "sell":0};
     let buyPrice = 0;
     let sellPrice = 0;
+    let dayBenefitPrice = {"0":[], "1":[], "2":[], "average":[], "buy":[], "sell":[]};
 
     const processedData = data.map((trade, index) => {        
         if( trade.code != undefined ){
@@ -111,6 +112,13 @@ function processData(data, type='TXF') {
                     if (totalBenefitPrice[loop] < maxValue[loop]) {
                         maxBackValue[loop] = Math.min(maxBackValue[loop], totalBenefitPrice[loop] - maxValue[loop]);
                     }
+                    
+                    if( dayBenefitPrice[loop][trade.date] !== undefined ){
+                        dayBenefitPrice[loop][trade.date] += benefitPrice[loop] ;
+                    }else{
+                        dayBenefitPrice[loop][trade.date] = benefitPrice[loop] ;
+                    }
+
                 }            
                 loopList.pop();
 
@@ -152,6 +160,7 @@ function processData(data, type='TXF') {
         filteredData,
         totalBenefitPrice,
         maxBackValue,
+        dayBenefitPrice,
         winRatio,
         winPrice,
         winTimes,
@@ -198,7 +207,7 @@ function createCharts(processedData) {
             {
                 label: '累計收益-綜合',
                 data: processedData.map(t => t.rowBenefitPrice_average),
-                borderColor: 'blue',
+                borderColor: 'yellow',
                 fill: false
             }
             ]
@@ -250,6 +259,7 @@ function createCharts(processedData) {
 }
 
 function updateSummary(datasets, type='TXF') {
+    
     $("#winPrice").text(datasets.winPrice["0"]);
     $("#losePrice").text(datasets.losePrice["0"]);
     $("#totalPrice").text(datasets.winPrice["0"] + datasets.losePrice["0"]);
@@ -270,6 +280,35 @@ function updateSummary(datasets, type='TXF') {
         $('#roi_' + loop).text((datasets.totalBenefitPrice[loop] /(2*cause) * 100).toFixed(2) + "%");
         $('#acc_roi_' + loop).text((datasets.totalBenefitPrice[loop] /(2*(cause-datasets.maxBackValue[loop])) * 100).toFixed(2) + "%");
     }
+
+    $('#s1_1').text( $("#totalTimes").text() );
+    $('#s1_2').text( datasets.winTimes["buy"] + datasets.loseTimes["buy"] );
+    $('#s1_3').text( datasets.winTimes["sell"] + datasets.loseTimes["sell"] );
+    $('#s1_4').text( $("#totalPrice").text() );
+    $('#s1_5').text( datasets.totalBenefitPrice["buy"] );
+    $('#s1_6').text( datasets.totalBenefitPrice["sell"] );
+    $('#s1_7').text( $("#winRatio_average").text() );
+    $('#s1_8').text( $("#loseRatio_average").text() );
+    $('#s1_9').text( Math.max(...Object.values(datasets.dayBenefitPrice["buy"])) );
+    $('#s1_10').text( Math.max(...Object.values(datasets.dayBenefitPrice["sell"])) );
+    
+    $('#s2_1').text( datasets.winTimes["buy"] + datasets.loseTimes["buy"] );
+    $('#s2_2').text( datasets.totalBenefitPrice["buy"] );
+    $('#s2_3').text( (datasets.winRatio["buy"] * 100).toFixed(2) + "%" );
+    $('#s2_4').text( ((1-datasets.winRatio["buy"]) * 100).toFixed(2) + "%" );
+    $('#s2_5').text( Math.max(...Object.values(datasets.dayBenefitPrice["buy"])) );
+    $('#s2_5a').text( Object.keys(datasets.dayBenefitPrice["buy"]).reduce((a, b) => datasets.dayBenefitPrice["buy"][a] > datasets.dayBenefitPrice["buy"][b] ? a : b) );
+    $('#s2_6').text( Math.min(...Object.values(datasets.dayBenefitPrice["buy"])) );
+    $('#s2_6a').text( Object.keys(datasets.dayBenefitPrice["buy"]).reduce((a, b) => datasets.dayBenefitPrice["buy"][a] < datasets.dayBenefitPrice["buy"][b] ? a : b) );
+
+    $('#s3_1').text( datasets.winTimes["sell"] + datasets.loseTimes["sell"] );
+    $('#s3_2').text( datasets.totalBenefitPrice["sell"] );
+    $('#s3_3').text( (datasets.winRatio["sell"] * 100).toFixed(2) + "%" );
+    $('#s3_4').text( ((1-datasets.winRatio["sell"]) * 100).toFixed(2) + "%" );
+    $('#s3_5').text( Math.max(...Object.values(datasets.dayBenefitPrice["sell"])) );
+    $('#s3_5a').text( Object.keys(datasets.dayBenefitPrice["sell"]).reduce((a, b) => datasets.dayBenefitPrice["sell"][a] > datasets.dayBenefitPrice["sell"][b] ? a : b) );
+    $('#s3_6').text( Math.min(...Object.values(datasets.dayBenefitPrice["sell"])) );
+    $('#s3_6a').text( Object.keys(datasets.dayBenefitPrice["sell"]).reduce((a, b) => datasets.dayBenefitPrice["sell"][a] < datasets.dayBenefitPrice["sell"][b] ? a : b) );
 }
     
 
