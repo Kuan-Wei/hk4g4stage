@@ -47,7 +47,7 @@
         /* .table > tbody > tr > th, .table > tbody > tr > td {
           vertical-align: middle;
         } */
-        .table > thead > tr > th {
+        .table > thead > tr > th, #clipboardContent td {
           /* vertical-align: middle; */
           text-align: center;
         }
@@ -72,7 +72,7 @@
       
         <h1 class="m-4">
             <img class="pe-3" src='stock-1.png' height="60"/>
-            剪貼簿分析 <small class="fs-5">20241101.02</small>
+            剪貼簿分析 <small class="fs-5">20241103.01</small>
             <button class="btn btn-primary pull-right" onclick="printClipbordContent()">貼上剪貼簿內容(大台)</button> 
             <button class="btn btn-primary pull-right" onclick="printClipbordContent('MXF')">貼上剪貼簿內容(小台)</button> 
         </h1>        
@@ -249,7 +249,7 @@
         </div>
         <div class="table-responsive m-1 rowData">    
           <h3>交易紀錄</h3>      
-            <table class="table caption-top align-middle main-table table-striped" style="white-space: nowrap;">
+            <table class="table caption-top align-middle main-table table-striped table-bordered" style="white-space: nowrap;">
                 <thead>
                 <tr>
                     <th>時間</th>
@@ -357,14 +357,14 @@
               <td>${v.price}</td>
               <td>${v.type}</td>
               <td>${v.code}</td>
-              <td>${v.benefit["0"]}</td>
-              <td>${v.benefitPrice["0"]}</td>
-              <td>${v.benefitPrice["average"]}</td>
-              <td>${v.benefitPrice["buy"]}</td>
+              <td>${v.benefit["0"] == 0 ? '' : v.benefit["0"]}</td>
+              <td>${v.benefitPrice["0"] == 0 ? '' : v.benefitPrice["0"]}</td>
+              <td>${v.benefitPrice["average"] == 0 ? '' : v.benefitPrice["average"]}</td>
+              <td>${v.benefitPrice["buy"] == 0 ? '' : v.benefitPrice["buy"]}</td>
               <td>${v.rowBenefitPrice_buy}</td>
-              <td>${v.benefitPrice["sell"]}</td>
+              <td>${v.benefitPrice["sell"] == 0 ? '' : v.benefitPrice["sell"]}</td>
               <td>${v.rowBenefitPrice_sell}</td>
-              <td>${v.rowBenefitPrice_average}</td>
+              <td>${v.rowBenefitPrice_average }</td>
             </tr>`)
             }
           })
